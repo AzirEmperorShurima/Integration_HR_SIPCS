@@ -24,6 +24,7 @@ socket_Client.addEventListener('message', async (e) => {
                 console.log("Tin nhắn là một đối tượng:", data);
                 //window.location.reload();
                 // Thêm mã xử lý cho đối tượng tại đây
+                await addListPersonToTable(getListPerson, "data")
             } else {
                 console.log("Tin nhắn không phải là một đối tượng.");
             }
