@@ -243,10 +243,11 @@ export const addListPersonToTable = async (list, tableId) => {
                 //changeCL();
                 tlName.textContent = `Edit EMP : ${element.firstName + ' ' + element.lastName}  :)) `
                 employeeID.value = element.employeeId
+                // employeeID.readonly = true;
                 //element.employeeId
                 // employeeID.style.cursor = 'wait'
 
-                //employeeID.readOnly = true;
+                employeeID.readOnly = true;
                 firstName.value = element.firstName
                 lastName.value = element.lastName
                 address2.value = element.Address2
