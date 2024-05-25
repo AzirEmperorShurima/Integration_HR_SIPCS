@@ -10,42 +10,45 @@ import { MongoClient } from 'mongodb';
 import { DataSourceInMongoose } from './MongoData.js';
 import { add_Data_to_mongodb_SQLserver } from './AddToBoldDB.js';
 import { change_Data_in_mongodb_SQLserver } from './ChangeMG_SQL.js';
-import { fetchEmployees1 } from '../controllers/employee.controller.js'
+//import { fetchEmployees1 } from '../controllers/employee.controller.js'
 import { Delete_EMP } from './DeleteMonG_SQL.js'
+import cookieParser from 'cookie-parser'
+import { getCookies } from './cookies.js';
 const urlencoded = new MongoClient('mongodb://localhost:27017/');
 const app = express();
+//const { createProxyMiddleware } = require('http-proxy-middleware');
 const router = express.Router();
-const identifications = 'Dashboard_BE'
-const socketclient = new WebSocket(`ws://localhost:8080?identification=${identifications}`)
-const guitinnhandenserverthanyeu = {
-    message: ""
-}
-socketclient.on('open', () => {
-    console.log('Connect to Server Successfully !!!!\n CodeLord Hacking ....');
-    guitinnhandenserverthanyeu.message = 'Hi I Am SIPCS Bro';
-    socketclient.send(JSON.stringify(guitinnhandenserverthanyeu));
-});
+// const identifications = 'Dashboard_BE'
+// const socketclient = new WebSocket(`ws://localhost:8080?identification=${identifications}`)
+// const guitinnhandenserverthanyeu = {
+//     message: ""
+// }
+// socketclient.on('open', () => {
+//     console.log('Connect to Server Successfully !!!!\n CodeLord Hacking ....');
+//     guitinnhandenserverthanyeu.message = 'Hi I Am SIPCS Bro';
+//     socketclient.send(JSON.stringify(guitinnhandenserverthanyeu));
+// });
 
-//  console.log('Connect to Server Successfully !!!!\n CodeLord Hacking ....');\
-socketclient.on('message', (e) => {
-    try {
+// //  console.log('Connect to Server Successfully !!!!\n CodeLord Hacking ....');\
+// socketclient.on('message', (e) => {
+//     try {
 
-        if (e instanceof Buffer) {
-            const str = e.toString('utf8'); // Chuyển đổi Buffer thành chuỗi UTF-8
-            console.log(str);
-        } else {
-            const data = JSON.parse(e);
-            console.log(data);
-        }
-    } catch (error) {
-        console.log(e);
-    }
+//         if (e instanceof Buffer) {
+//             const str = e.toString('utf8'); // Chuyển đổi Buffer thành chuỗi UTF-8
+//             console.log(str);
+//         } else {
+//             const data = JSON.parse(e);
+//             console.log(data);
+//         }
+//     } catch (error) {
+//         console.log(e);
+//     }
 
-});
-socketclient.on('error', function (error) {
-    console.error('Có lỗi xảy ra:', error);
-});
-
+// });
+// socketclient.on('error', function (error) {
+//     console.error('Có lỗi xảy ra:', error);
+// });
+router.post('/cookies', getCookies)
 router.post('/create', add_Data_to_mongodb_SQLserver)
 router.get('/codelord', fullData);
 router.post('/codelord', Delete_EMP);
@@ -63,33 +66,34 @@ router.get('/sqldata', exportDataInSQL);
 //     socketclient.send(JSON.stringify(dataToSend));
 // }, 5000);
 // console.log('EMP : ' + await fetchEmployees());
-(async () => {
-    try {
-        await urlencoded.connect();
-        const db = urlencoded.db('apicompany');
-        const collection = db.collection('employees');
+// (async () => {
+//     try {
+//         await urlencoded.connect();
+//         const db = urlencoded.db('apicompany');
+//         const collection = db.collection('employees');
 
-        const changeStream = collection.watch();
+//         const changeStream = collection.watch();
 
-        changeStream.on('change', async (change) => {
-            console.log(`Change: ${change.operationType} on _id ${change.documentKey._id}`);
-            console.log(change.fullDocument);
-            const dataToSend = {
-                TargetID: 'NULL',
-                identification: 'Dashboard_FE',
-                message: JSON.stringify(change.fullDocument)
+//         changeStream.on('change', async (change) => {
+//             console.log(`Change: ${change.operationType} on _id ${change.documentKey._id}`);
+//             console.log(change.fullDocument);
+//             const dataToSend = {
+//                 TargetID: 'NULL',
+//                 identification: 'Dashboard_FE',
+//                 message: JSON.stringify(change.fullDocument)
 
 
-            };
-            console.log("Data To SEND :" + dataToSend);
-            socketclient.send(JSON.stringify(dataToSend));
-        });
+//             };
+//             console.log("Data To SEND :" + dataToSend);
+//             socketclient.send(JSON.stringify(dataToSend));
+//         });
 
-        console.log('Watching for changes...');
-    } catch (error) {
-        console.error(error);
-    }
-})();
+//         console.log('Watching for changes...');
+//     } catch (error) {
+//         console.error(error);
+//     }
+// })();
+app.use(cookieParser());
 app.use(
     cors({
 
@@ -150,7 +154,7 @@ app.listen(port, () => {
     //  \\____\\___/ \\__,_|\\___/|_|  \\___|_|_|\\__, |
     //                                      |___/ 
     // `);
-    ascii_art('CodeLord', '3D-ASCII')
+    ascii_art('CodeLord', 'Doom')
         .then(art => console.log(art))
         .catch(err => console.error(err));
     ascii_art(`Server On Port ${port}`, 'Doom')
